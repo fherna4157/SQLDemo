@@ -1,3 +1,9 @@
+/*
+returns name of employee & manager
+tblEmployee
+___________
+EmployeeID  Name  ManagerID
+*/
 select e.EmployeeName as 'Employee', m.EmployeeName as 'Manager' from tblEmployee e 
 left join 
 tblEmployee m 
