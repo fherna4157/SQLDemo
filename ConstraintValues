@@ -1,0 +1,10 @@
+USE [Sample]
+GO
+/*
+Limits the values I can place into gender to Male or Female
+*/
+ALTER TABLE [dbo].[tblEmployee]  WITH CHECK ADD  CONSTRAINT [CK_tblEmployee_Gender] CHECK  (([Gender]='Male' OR [Gender]='Female'))
+GO
+
+ALTER TABLE [dbo].[tblEmployee] CHECK CONSTRAINT [CK_tblEmployee_Gender]
+GO
