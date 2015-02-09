@@ -1,0 +1,22 @@
+customers who never ordered a helmat.
+
+the filtered join retuns customerid's for all customers who ordered a helmet.
+the left join retuns all customerids from the cdustomers table 
+where f.CustomerID is null looksfor null values which means these customers never ordered helmets 
+select c.custFirstName , c.custLastname from customers c
+left join 
+(
+select o.ordernumber , p.ProductName , o.CustomerID from orders o
+join 
+Order_Details od 
+on 
+o.OrderNumber = od.OrderNumber
+join 
+Products p
+on 
+od.ProductNumber = p.ProductNumber
+where p.productname like '%helmet%'
+) f
+on 
+f.customerid = c.customerid 
+where f.CustomerID is null
