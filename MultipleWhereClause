@@ -1,7 +1,7 @@
 /*
-Find student who has 85 or better in art and 85 or better in cis
-the first answer is wrong because the two cses cant match simultaneously
-the second case is correct uses two independent where clauses to match. 
+
+Find student who has 85 or better in art and 85 or better in cis.
+This example  uses two independent where clauses to solve the query
 */
 
  select s.studfirstname , s.studlastname from students s 
