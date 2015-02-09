@@ -1,0 +1,20 @@
+Enter file contents here
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+create view [dbo].[vw_reorder] 
+as
+select s.* , p.ProductName , m.InStock , m.[Min] from Store s 
+cross join 
+minInventory m
+join Products p 
+on 
+p.ProductID = m.ProductID
+where  m.InStock - m.[min]  <0
+
+GO
+
+
