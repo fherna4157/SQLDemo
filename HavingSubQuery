@@ -1,0 +1,8 @@
+ -- selects vendors who took longer then average to deliver product
+select v.vendname , avg(pv.DaysToDeliver) as avgdaystodeliver from vendors v
+join 
+product_vendors pv 
+on 
+pv.VendorID = v.VendorID
+group by v.VendName
+having avg(pv.DaysToDeliver) > ( select avg(DaysToDeliver) from Product_Vendors )
