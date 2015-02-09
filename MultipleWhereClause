@@ -1,0 +1,36 @@
+/*
+Find student who has 85 or better in art and 85 or better in cis
+the first answer is wrong because the two cses cant match simultaneously
+the second case is correct uses two independent where clauses to match. 
+*/
+
+ select s.studfirstname , s.studlastname from students s 
+where 
+s.studentid in 
+(
+select ss.studentid from student_schedules ss
+ join classes c 
+ on 
+ c.ClassID = ss.ClassID
+ join 
+ subjects s 
+ on 
+ s.subjectid = c.SubjectID
+ where ss.Grade >=85 and s.CategoryID = 'art'
+ )
+
+ and 
+
+ s.StudentID in 
+
+ (
+ select ss.studentid from student_schedules ss
+ join classes c 
+ on 
+ c.ClassID = ss.ClassID
+ join 
+ subjects s 
+ on 
+ s.subjectid = c.SubjectID
+ where ss.Grade >=85 and s.CategoryID = 'cis'
+ )
