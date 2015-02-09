@@ -1,12 +1,11 @@
-Enter file contents here
-SET ANSI_NULLS ON
-GO
+/*
+Tahis query resolves a many to many relationship. 
+there are many stores with many products. 
+The crossjoin creates a cartisian product between the stores and products
+This query shows which items need to be reordered. 
+*/
 
-SET QUOTED_IDENTIFIER ON
-GO
 
-create view [dbo].[vw_reorder] 
-as
 select s.* , p.ProductName , m.InStock , m.[Min] from Store s 
 cross join 
 minInventory m
@@ -15,6 +14,6 @@ on
 p.ProductID = m.ProductID
 where  m.InStock - m.[min]  <0
 
-GO
+
 
 
