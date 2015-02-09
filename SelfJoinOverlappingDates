@@ -1,0 +1,16 @@
+--retruns overlapping dates via self join from engagements
+
+
+ 
+
+select e1.entertainerid , e1.startdate , e1.EndDate from [Engagements] e1 
+join 
+[Engagements] e2 
+on 
+e1.EntertainerID = e2.EntertainerID
+where e1.EngagementNumber <> e2.EngagementNumber -- must be two different engagements
+and 
+e1.StartDate >= e2.StartDate -- start date greater then of equaul to 
+and 
+e1.EndDate <= e2.EndDate -- end date less then or equal to
+GO
