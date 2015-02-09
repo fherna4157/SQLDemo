@@ -1,0 +1,10 @@
+-- data is spread over to tables wit honly employeeID in common. 
+-- this query resolves the data into one table 
+select isnull (e1.EmployeeID , e2.EmployeeID) as ID , isnull(e1.EmpFirstName , e2.EmpFirstName) as 'FirstName' 
+, isnull(e1.EmpLastName , e2.EmpLastName) as 'LastName' , isnull(e1.EmpPhoneNumber , e2.EmpPhoneNumber) as 'PhoneNumber' ,
+isnull(e1.EmpState , e2.EmpState) as 'State' , isnull(e1.EmpStreetAddress , e2.EmpStreetAddress) as 'StreetAddress'
+ from Employees1 e1 
+join
+Employees2 e2 
+on 
+e1.EmployeeID = e2.EmployeeID
