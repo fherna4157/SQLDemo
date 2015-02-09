@@ -1,0 +1,31 @@
+The union clause joins two seprate queries with similar data types.
+we use it when no direct relationship exist between two data sets 
+this query returns vendors who suply helmets and customers who purchased helmets 
+
+select v.vendname , p.ProductName , 'Vendor' as grouptype from Vendors v 
+join 
+Product_Vendors pv 
+on 
+v.VendorID = pv.VendorID
+join 
+products p 
+on
+p.productnumber = pv.productnumber 
+where p.productname like '%helmet%'
+
+union
+
+select c.custfirstname + c.custlastname as customername , p.ProductName  , 'Customer' as grouptype from customers c 
+join 
+Orders o 
+on 
+o.CustomerID = c.customerid 
+join 
+Order_Details od 
+on 
+o.OrderNumber = od.OrderNumber
+join 
+products p 
+on 
+p.ProductNumber = od.productnumber 
+where p.ProductName like '%helmet%' 
