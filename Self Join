@@ -1,0 +1,5 @@
+select e.EmployeeName as 'Employee', m.EmployeeName as 'Manager' from tblEmployee e 
+left join 
+tblEmployee m 
+on 
+e.ManagerID = m.EmployeeID
