@@ -1,0 +1,13 @@
+--use SchoolSchedulingExample
+/*
+This query returns teachers teaching less the three classes 
+Do to the fact that its possible a teacher is teaching no classes we use a left join to create the null case
+when staffid is null retun 0 else reurn the agregate count 
+*/
+select s.StfLastname + ', ' + s.StfFirstName as 'FacultyName'  , case when fc.StaffID is null  then  0 else count(*) end NumberofClasses   from staff s 
+left join 
+faculty_classes fc 
+on 
+s.StaffID = fc.StaffID
+group by s.StfLastname , s.StfFirstName , fc.StaffID
+having count(*)< 3 or fc.StaffID is null  Enter file contents here
