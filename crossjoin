@@ -1,5 +1,5 @@
 /*
-Tahis query resolves a many to many relationship. 
+This query resolves a many to many relationship. 
 there are many stores with many products. 
 The crossjoin creates a cartisian product between the stores and products
 This query shows which items need to be reordered. 
