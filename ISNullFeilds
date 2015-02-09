@@ -1,4 +1,4 @@
--- data is spread over to tables wit honly employeeID in common. 
+-- data is spread over two tables with only employeeID in common. 
 -- this query resolves the data into one table 
 select isnull (e1.EmployeeID , e2.EmployeeID) as ID , isnull(e1.EmpFirstName , e2.EmpFirstName) as 'FirstName' 
 , isnull(e1.EmpLastName , e2.EmpLastName) as 'LastName' , isnull(e1.EmpPhoneNumber , e2.EmpPhoneNumber) as 'PhoneNumber' ,
