@@ -1,0 +1,20 @@
+create function getSalesbyProductIDMonthYear (@ID INT , @Month int , @Year INT) 
+RETURNS money
+AS
+BEGIN
+		/*Scalar UDF returns total salles for product by ProductID , Month ,Year */
+		Declare @total money 
+		select @total= sum (od.QuantityOrdered* od.QuotedPrice)from products p 
+		join 
+		Order_Details od 
+		on 
+		p.ProductNumber = od.ProductNumber
+		join orders o 
+		on 
+		o.OrderNumber = od.OrderNumber
+
+		where p.productnumber=@ID and month(o.OrderDate) = @Month and year(o.OrderDate)=@Year 
+		group by p.ProductName
+
+  return @total
+END
