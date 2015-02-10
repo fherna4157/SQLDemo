@@ -1,0 +1,13 @@
+alter function FindEmployeebyID (@ID INT ) 
+RETURNS VARCHAR(25)
+AS
+BEGIN
+
+   RETURN ISNULL(
+        (
+        SELECT
+            employeename
+        FROM tblEmployee
+        WHERE EmployeeID = @ID
+    ), 'NOT FOUND');
+END
