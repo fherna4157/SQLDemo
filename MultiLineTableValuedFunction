@@ -1,0 +1,7 @@
+create function MultiLineTableValuedFuction (@Gender nvarchar(20))
+returns @table table  (id int, EmployeeName varchar(25) , ManagerID INT , Gender varchar (20)  )
+begin
+insert into @table(id , EmployeeName , ManagerID , Gender)
+Select * from tblEmployee where Gender = @Gender
+return
+end
