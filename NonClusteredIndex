@@ -1,3 +1,5 @@
+/*This inproves the performance of a query that uses Salary. */
+
 CREATE NONCLUSTERED INDEX [NonClusteredIndextblEmployee_Salary] ON [dbo].[tblEmployee]
 (
 	[Salary] DESC
