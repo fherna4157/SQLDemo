@@ -1,0 +1,4 @@
+CREATE NONCLUSTERED INDEX [NonClusteredIndextblEmployee_Salary] ON [dbo].[tblEmployee]
+(
+	[Salary] DESC
+)
