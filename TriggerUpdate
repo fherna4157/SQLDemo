@@ -1,0 +1,57 @@
+alter trigger trg_tblEmployee_ForUpdate
+on 
+tblEmployee 
+For update  
+as 
+begin
+/*This is an update trigger. It inserts data into an audit table when data is updated in tblEmployee*/
+declare @EmployeeID int 
+declare @oldname varchar(25) ,  @newname varchar (25)
+declare @oldsalary money , @newsalary money
+declare @oldDeptID INT , @newdeptid int 
+declare @auditsrting nvarchar (1000)
+
+
+select * into #tmptblInserted from inserted
+
+-- Inserted or new records
+while (exists ( SELECT @EmployeeID from #tmptblInserted))
+
+	begin
+			SET @auditsrting =''
+			-- gets new data inserted 
+			select top 1 @EmployeeID = EmployeeID ,
+			 @newname = EmployeeName , @newsalary = salary 
+			  
+			
+			from #tmptblInserted
+
+			--gets deleted data
+			select top 1 @EmployeeID = EmployeeID ,
+			 @oldname = EmployeeName , @oldsalary = salary 
+			 
+			
+			from deleted where EmployeeID = @EmployeeID
+
+			-- create audit string 
+			set @auditsrting = 'Employee wuth ID ' + cast (@EmployeeID as varchar(25))
+
+			if (@newname <> @oldname)
+				begin
+					set  @auditsrting = @auditsrting + ' Has changed name from  ' + @oldname + ' to ' + @newname
+				end 
+
+			if (@oldsalary <> @newsalary)
+				begin
+					set  @auditsrting = @auditsrting + ' Has changed salary from  ' +cast( @oldsalary as varchar(25)) + ' to ' + cast( @newsalary as varchar(25))
+				end 
+
+			-- insert new record in audit table after update
+			insert into tblEmployee_Audit values(@auditsrting)
+
+			-- remove record from tmptable for exit of while loop 
+			delete from #tmptblInserted where EmployeeID = @EmployeeID
+
+	end  			
+
+end
