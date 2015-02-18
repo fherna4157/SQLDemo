@@ -1,0 +1,13 @@
+alter trigger trg_tblEmployee_ForDelete
+on 
+tblEmployee 
+For Delete  
+as 
+begin
+/*This is an delete trigger. It inserts data into an audit table when data is deleted tblEmployee*/
+	Declare @EmployeeID int
+	
+	Select @EmployeeID = [EmployeeID]  from deleted
+	Insert into  tblEmployee_Audit(AuditData)
+	values ('Empployee with ID number ' + cast (@EmployeeID as varchar(5)) + ' was deleted at ' + cast (getdate() as varchar(50)) ) 
+end
