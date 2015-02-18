@@ -1,0 +1,47 @@
+alter trigger tr_vw_EmployeeDetail_InsteadofInsert
+on vw_EmployeeDetail
+instead of insert 
+as
+begin 
+/*
+Views with multiple tables can not be directly inserted so you must create an instead of trigger.
+The trigger inserts the data into the correct tables  
+
+*/
+	Declare @DeptID int ,  @ManagerID int , @Gender varchar(25) , @Salary as money
+
+	select @Deptid = tblDepartments.DepartmentID , @ManagerID =inserted.ManagerID ,  @salary =inserted.salary from tblDepartments
+	join inserted on 
+	tblDepartments.DepartmentName = inserted.DepartmentName
+
+	select @Gender = tblGender.Gender from tblGender
+	join inserted on 
+	tblGender.Gender = inserted.Gender
+	
+	
+	IF (@DeptID IS NULL) 
+	BEGIN
+		RAISERROR ('Dept does not exist' , 16 , 1)
+
+		return 
+	END   
+
+	IF (@ManagerID IS NULL) 
+	BEGIN
+		RAISERROR ('Must enter managerID' , 16 , 1)
+
+		return 
+	END 
+
+	IF (@Gender IS NULL) 
+	BEGIN
+		RAISERROR ('Gendewr must be male or female' , 16 , 1)
+
+		return 
+	END 
+
+
+	insert into tblEmployee(EmployeeName , ManagerID, Gender , Salary , DepartmentID)
+	SELECT employeeName , ManagerID , Gender , salary , @DeptID FROM inserted
+
+end
