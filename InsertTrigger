@@ -1,0 +1,14 @@
+alter trigger trg_tblEmployee_ForInsert
+on 
+tblEmployee 
+For Insert  
+as 
+begin
+/*This is an insert trigger. It inserts data into an audit table when data is entered into tblEmployee*/
+	Declare @EmployeeID int
+	Declare @Salary money 
+	Select @EmployeeID = [EmployeeID] , @Salary = Salary from inserted 
+
+	Insert into  tblEmployee_Audit(AuditData)
+	values ('New Empployee with ID number ' + cast (@EmployeeID as varchar(5)) + ' was inserted at ' + cast (getdate() as varchar(50)) +' with a salary of '+ cast (@salary as varchar(25))) 
+end
