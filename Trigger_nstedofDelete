@@ -4,7 +4,7 @@ on
 instead of delete 
 as
 begin
-
+	// if a view has more then one table use insteqad of delete to ensure we delete the correct data 
 	delete  from tblEmployee  where employeeid in ( select employeeid from deleted)
 
 end 
