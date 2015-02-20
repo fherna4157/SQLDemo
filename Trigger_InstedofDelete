@@ -1,0 +1,10 @@
+alter trigger tr_vw_EmployeeDetail_InstedofDelete
+on 
+[dbo].[vw_EmployeeDetail]
+instead of delete 
+as
+begin
+
+	delete  from tblEmployee  where employeeid in ( select employeeid from deleted)
+
+end 
