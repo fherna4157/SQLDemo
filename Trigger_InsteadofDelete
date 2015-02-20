@@ -1,4 +1,4 @@
-alter trigger tr_vw_EmployeeDetail_InstedofDelete
+alter trigger tr_vw_EmployeeDetail_InsteadofDelete
 on 
 [dbo].[vw_EmployeeDetail]
 instead of delete 
