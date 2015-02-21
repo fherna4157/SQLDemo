@@ -1,0 +1,9 @@
+--Select into will create the temp table on the fly 
+select d.DepartmentName , count(*) as 'Number of employees' into #tmptbl
+from tblDepartments d
+join tblEmployee e 
+on 
+d.DepartmentID = e.DepartmentID
+group by d.DepartmentName
+
+select* from #tmptbl 
