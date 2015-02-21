@@ -1,0 +1,12 @@
+with employeecount (departmentname , employeecount)
+as 
+(
+select d.DepartmentName , count(*) as 'Number of employees' from tblDepartments d
+join tblEmployee e 
+on 
+d.DepartmentID = e.DepartmentID
+group by d.DepartmentName
+)
+
+select departmentname , employeecount from employeecount where  employeecount > 2 
+ 
