@@ -9,5 +9,6 @@ r.RecipeClassID = rc.RecipeClassID
  as sourcetable 
  pivot 
  (
+  -- count indivdaul titles for description group 
  count(RecipeTitle) for RecipeClassDescription in ([Main course] , [Vegetable] , [Starch] , [Hors d'oeuvres] ,  [Dessert])
  )as pivottable 
