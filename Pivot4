@@ -1,0 +1,14 @@
+select [Year] , [January] , [February] , [March] , [April] ,[May] , [June] , [July] , [August] , [September] , [October] , [November] , [December] from 
+(
+select  year(o.orderdate) as 'Year' , datename(month, o.orderdate) as 'Month' , od.QuantityOrdered * od.QuotedPrice as 'TotalSale'   from orders o 
+join 
+Order_Details od 
+on 
+o.OrderNumber = od.OrderNumber
+
+)
+as sourcetable
+pivot(
+sum (totalsale) for [Month] in ([January] , [February] , [March] , [April] ,[May] , [June] , [July] , [August] , [September] , [October] , [November] , [December])
+)
+as pvt
