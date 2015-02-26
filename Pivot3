@@ -1,0 +1,18 @@
+select 'Number of teachers ' , [Art History] as 'art history' , [Preparatory Mathematics] as 'math prep' , [Survey of Economics] as 'Survey of Economics'  from 
+(
+select  s.stflastname , su.SubjectName from [dbo].[Staff] s 
+join 
+Faculty_Classes fc on 
+s.StaffID = fc.StaffID
+join Classes c 
+on 
+c.ClassID = fc.ClassID
+
+join [dbo].[Subjects] su 
+on 
+c.SubjectID = su.SubjectID
+group by su.SubjectName , s.StfLastname , s.StfFirstName
+) as sourcetable 
+pivot (
+count(stflastname) for subjectname in ( [Art History] ,  [Preparatory Mathematics] , [Survey of Economics]  ))
+as pvt
