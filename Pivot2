@@ -1,7 +1,4 @@
-select i.IngredientName , ic.ingredientclassdescription from ingredients i 
-join ingredient_classes ic 
-on 
-i.ingredientclassid = ic.ingredientclassid
+
 
 select 'Number of spices' as 'Number of spices'  , [Spice] , [Meat] , [Vegetable] , [Liquid] , [Condiment] , [Packaged food]
 from (
