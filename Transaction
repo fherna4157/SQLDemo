@@ -1,0 +1,20 @@
+create procedure spupdateSalary
+@employeeid int ,
+@salary money
+as 
+begin
+
+	begin try
+		begin transaction 
+
+		update tblEmployee
+		set salary = @salary where EmployeeID = @employeeid
+		commit transaction 
+	end try
+	
+	begin catch
+		rollback transaction
+	end catch 
+
+
+end 
