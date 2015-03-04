@@ -1,0 +1,18 @@
+Create Procedure Tranaction2
+AS 
+BEGIN TRANsaction
+ INSERT INTO [authors]([au_id], [au_lname], [au_fname], [phone], [contract])
+ VALUES ('172-32-1176', 'Gates', 'Bill', '800-BUY-MSFT', 1) 
+
+IF @@ERROR <> 0 
+BEGIN 
+	ROLLBACK TRANSACTION 
+	return 10 
+END 
+UPDATE authors SET au_fname = 'Johnzzz' WHERE au_id = '172-32-1176' 
+IF @@ERROR <> 0 
+BEGIN 
+	ROLLBACK TRAN 
+	return 11 
+END 
+COMMIT TRANSACTION
