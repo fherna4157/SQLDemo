@@ -10,10 +10,12 @@ begin
 		update tblEmployee
 		set salary = @salary where EmployeeID = @employeeid
 		commit transaction 
+		print 'trans committed'
 	end try
 	
 	begin catch
 		rollback transaction
+		print 'trans rolledback'
 	end catch 
 
 
