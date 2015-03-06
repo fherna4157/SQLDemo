@@ -1,0 +1,19 @@
+declare @productid int 
+declare @name varchar(30)
+
+declare		ProductsCursor cursor for 
+select productid , productname from products 
+
+open ProductsCursor
+
+Fetch next from ProductsCursor into @productid , @name 
+
+while (@@FETCH_STATUS = 0)
+Begin
+	fetch next from ProductsCursor into @Productid , @name
+
+	select @Productid as 'ID' , @name as 'Name'
+End
+
+close productsCursor 
+deallocate productsCursor 
