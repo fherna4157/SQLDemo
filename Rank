@@ -1,0 +1,9 @@
+select r.RecipeTitle , i.IngredientName , RANK() over (PARTITION BY  r.RecipeTitle order by i.IngredientName ) as 'Ingredint num in recipie '  from Recipes r 
+join 
+Recipe_Ingredients ri 
+on 
+r.RecipeID = ri.RecipeID
+join 
+Ingredients i 
+on 
+i.IngredientID = ri.IngredientID
