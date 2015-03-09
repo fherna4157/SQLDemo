@@ -1,0 +1,12 @@
+select s.stffirstname , s.StfLastname , su.SubjectName , rank() over (PARTITION  by s.stflastname order by su.subjectname ) as 'class taught by professor' from staff s
+join 
+Faculty f 
+on 
+f.StaffID = s.StaffID
+join 
+Faculty_Subjects fs
+on 
+f.StaffID = fs.StaffID
+join subjects su
+on 
+su.SubjectID = fs.SubjectID
