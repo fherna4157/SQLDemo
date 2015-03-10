@@ -1,0 +1,17 @@
+-- finding missing items converting except query to left join 
+
+SELECT  ProductID
+FROM    Production.Product
+EXCEPT
+SELECT  ProductID
+FROM    Sales.SpecialOfferProduct;
+
+-- same query results
+
+SELECT  p.ProductID
+FROM    Production.Product p 
+left join 
+Sales.SpecialOfferProduct s
+on
+p.ProductID = s.ProductID
+where s.ProductID is null
