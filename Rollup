@@ -1,0 +1,14 @@
+create  TABLE #t(NAME NVARCHAR(MAX),datee date,val money)
+
+insert INTO #t SELECT 'a','2012-01-02',100
+insert INTO #t SELECT 'a','2012-01-02',100
+insert INTO #t SELECT 'a','2012-01-03',100
+insert INTO #t SELECT 'a','2012-01-05',100
+insert INTO #t SELECT 'b','2012-01-06',200
+insert INTO #t SELECT 'b','2012-01-07',200
+insert INTO #t SELECT 'd','2012-01-07',400
+insert INTO #t SELECT 'e','2012-01-09',500
+insert INTO #t SELECT 'f','2012-01-12',600
+
+SELECT  Name,datee,SUM (val)as 'total' 
+from #t GROUP BY NAME ,datee with rollup
