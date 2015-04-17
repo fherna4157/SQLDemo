@@ -1,0 +1,22 @@
+alter procedure InsertUpdateTablePerson 
+ @fn varchar(20) ,  @ln varchar(20) , @City varchar(20) , @state varchar(20)
+as
+ 
+
+if exists (
+select id from  [dbo].[Person] where firstname = @fn and lastname = @ln
+)
+ begin
+	update Person
+	set FirstName =@fn ,
+	lastname = @ln , City = @City , State=@state
+	where firstname = @fn and lastname = @ln 
+	goto SkipInsert
+  
+ end
+
+ 
+ insert into person ( firstname ,  LastName , City , [state] )
+values ( @fn  ,  @ln  , @City  , @state)
+  
+SkipInsert:
