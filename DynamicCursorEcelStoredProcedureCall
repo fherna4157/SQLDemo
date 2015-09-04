@@ -1,0 +1,117 @@
+USE [PVSC]
+GO
+/****** Object:  StoredProcedure [dbo].[get_ExcelDataToEOPS]    Script Date: 9/4/2015 1:45:58 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[get_ExcelDataToEOPS] 
+AS 
+declare @DataCol varchar(25) , @DataCode varchar(25) ,   @IPN int , @Res int , @counter int
+
+declare @DataValue numeric(5,2)
+
+declare  @vsql nvarchar(max)    ,@vquery nvarchar(max)
+
+declare @objcursor as cursor 
+
+declare @DataDate datetime
+
+DECLARE @p_data_ori           NUMERIC(18,4) ,
+
+   @p_last_update_ori    DATETIME       ,  -- input and output
+
+     @p_data_code_ori      VARCHAR(10)    ,  -- output only
+     @p_data_comment_ori   VARCHAR(250)   ,  -- output only
+     @p_validated_by_ori   VARCHAR(16)    ,  -- output only
+     @p_rtn_status	       INT            ,  -- output only (always set on return)
+     @p_error_code         INT              -- output
+
+
+/*
+1	insert the excel data into a temp table 
+2	insert the fielsnames into #feildsname
+3	in a while loop iterate though the table 
+4	write the dynamic query 
+*/
+--select * from OPENQUERY(ExcelSourceMultiIPN,    'SELECT * FROM [Sheet2$]')
+--1	insert the excel data into a temp table 
+
+IF OBJECT_ID('dbo.insertExcelConfigdata', 'U') IS NOT NULL
+  DROP TABLE dbo.insertExcelConfigdata; 
+
+  --Datacol , IPN , RES
+select * into insertExcelConfigdata from OPENQUERY(ExcelSourceMultiIPN,    'SELECT * FROM [Sheet2$]') -- colnames in sheet 2 config
+--select *  from OPENQUERY(ExcelSourceMultiIPN,    'SELECT * FROM [Sheet1$]') -- data sheet
+
+--select * from insertExcelConfigdata
+
+
+while exists (select * from insertExcelConfigdata) -- loops over configuration data
+begin
+	select top 1  @DataCol = DataCol , @ipn =ipn , @res=res , @DataCode = datacode from insertExcelConfigdata
+
+	--SELECT 'Current row in the data set is: ' + @DataCol  + cast(@ipn as varchar(25)) + 'IPN ' + cast(@ipn as varchar(25))
+
+	--4	write the dynamic query
+	--set @vquery ='select * from test' 
+	--select *  from OPENQUERY(ExcelSourceMultiIPN,    'SELECT * FROM [Sheet1$]') 
+	-- set up variables for curor
+	set @vquery = 'select  [DateTime] , ' + @DataCol + ', ' +  @DataCode +' from OPENQUERY(ExcelSourceMultiIPN,    ''SELECT * FROM [Sheet1$]'')'
+
+	set @vsql = 'set @cursor = cursor forward_only static for ' + @vquery + ' open @cursor;'
+	
+	-- begin variable cursor
+	
+	exec sys.sp_executesql
+    @vsql
+    ,N'@cursor cursor output'
+    ,@objcursor output
+	
+	
+
+	fetch next from @objcursor into @DataDate ,@DataValue , @DataCode
+
+	
+	while (@@fetch_status = 0)
+	
+	begin
+			
+			-- stored procedure call
+
+		exec [dbo].[store_manual_data]
+			 @IPN , --@p_ipn 
+             @DataDate , -- @p_data_date
+			 @RES , --@p_resolution 
+			 @DataValue , --@p_data
+			 @DataCode , --@p_data_code
+			'automated insert' , --@p_data_comment
+			 @DataDate, --@p_last_update_ori  
+			@p_data_ori    output  ,  -- output only
+			@p_data_code_ori      output   ,  -- output only
+			@p_data_comment_ori   output   ,  -- output only
+			@p_validated_by_ori   output    ,  -- output only
+			@p_rtn_status	       output            ,  -- output only (always set on return)
+			@p_error_code  output
+
+
+
+
+
+
+	 	fetch next from @objcursor into @DataDate ,@DataValue , @DataCode 
+
+
+	end
+
+	close @objcursor
+	deallocate @objcursor
+	-- end variable cursor 
+
+	-- call strored manual data the colum names are datacol
+
+
+	delete from insertExcelConfigdata where DATACOL= @DataCol
+
+end 
+
