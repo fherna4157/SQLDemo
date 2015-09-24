@@ -1,0 +1,68 @@
+USE [PVSC]
+GO
+/****** Object:  StoredProcedure [dbo].[getmadgetechdatagaps]    Script Date: 9/24/2015 10:04:55 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[getmadgetechdatagaps] 
+as 
+declare @currentSerial as varchar(25)
+
+
+-- if table exist drop it 
+IF OBJECT_ID('#Dates', 'U') IS NOT NULL
+  DROP TABLE #Dates; 
+
+-- if table exist drop it 
+IF OBJECT_ID('#DistinctSerialNumber', 'U') IS NOT NULL
+  DROP TABLE #DistinctSerialNumber; 
+
+
+--drop table #Dates
+--drop table #DistinctSerialNumber
+
+CREATE TABLE #DistinctSerialNumber(
+   serial varchar(25))
+
+
+CREATE TABLE #Dates(
+   MyId INT IDENTITY (1,1),
+   serial varchar(25),
+   startdate Datetime ,
+   enddate datetime)
+
+insert into #DistinctSerialNumber
+select distinct (serial) from [dbo].[madgetechdata]
+
+while exists (select * from #DistinctSerialNumber)
+begin
+
+/*
+
+    select top 1 @TableID = TableID
+    from #ControlTable
+*/
+select top 1 @currentSerial = serial from #DistinctSerialNumber
+
+INSERT INTO #dates(serial , startdate , enddate) 
+select serial , startdate , enddate from [dbo].[madgetechdata] where serial = @currentSerial
+
+
+
+
+SELECT  
+       serial , startdate , enddate, 
+       DATEDIFF(day,
+               (SELECT f.enddate 
+                    FROM #dates f 
+                    WHERE f.MyID=d.MyID-1)
+                ,d.startdate) 
+       FROM #dates d
+
+
+delete from #DistinctSerialNumber where serial = @currentSerial
+
+delete from #dates
+
+end
