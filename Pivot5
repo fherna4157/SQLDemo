@@ -1,0 +1,20 @@
+
+select 'Number of product type by order' as 'Number of producttype by order' , sum([Accessories]) as 'Accessories' , sum([Bikes]) as 'Bikes' , sum([Clothing]) as 'Clothing' , sum([Components]) as 'Components', sum([Car racks]) as 'Car racks' , sum([Wheels]) as'Wheels'
+from(
+select
+ o.ordernumber , p.ProductName , c.CategoryDescription  from orders o 
+join Order_Details od 
+on 
+o.OrderNumber = od.OrderNumber
+join Products p 
+on 
+od.ProductNumber = p.ProductNumber
+join Categories c 
+on 
+p.CategoryID = c.CategoryID
+
+) as sourcetable
+
+pivot
+( count(productname) for CategoryDescription in ([Accessories] , [Bikes] , [Clothing] , [Components] , [Car racks] , [Wheels]) 
+) as pivottable
