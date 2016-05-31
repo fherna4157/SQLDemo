@@ -1,0 +1,8 @@
+--use salesorderdb
+select o.ordernumber  /*, od.QuotedPrice , od.QuantityOrdered */, sum( od.QuotedPrice * od.QuantityOrdered) as 'TotalSale', rank() over (order by sum( od.QuotedPrice * od.QuantityOrdered) desc ) as 'SalesRank' from Orders o
+join Order_Details od 
+on o.OrderNumber = od.OrderNumber
+join Products p
+on 
+od.ProductNumber = p.ProductNumber
+group by o.OrderNumber 
